@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  notifier:
+    build: .
+    container_name: mgu_ai_ml_notifier
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      # Mount directories to persist the SQLite database and app log files
+      - ./data:/app/data
+      - ./logs:/app/logs
+    command: python main.py --mode daemon

@@ -1,0 +1,29 @@
+# Virtual Environment
+.venv/
+venv/
+ENV/
+
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment Secrets
+.env
+
+# Database and logs
+# GHA will commit database updates, but we ignore local temp test DBs if needed.
+# If we deploy serverless, GHA updates data/mgu_notifier.db directly.
+# We can allow the database to be tracked or ignore it locally.
+# Usually, to avoid conflicts, we can commit the first database skeleton or let GHA build it.
+# Let's keep data/mgu_notifier.db untracked locally if needed, but for serverless we want it in git.
+# Let's ignore local logs and pytest cache
+logs/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS specific files
+.DS_Store
+Thumbs.db

@@ -7,12 +7,17 @@ on:
   workflow_dispatch:
     # Allow manual triggering
 
+env:
+  # Suppress Node.js 20 deprecation warnings by forcing actions runtime to Node 24
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   monitor:
     runs-on: ubuntu-latest
     permissions:
       # Required to commit changes back to the repository
       contents: write
+
 
     steps:
       - name: Checkout Repository

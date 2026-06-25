@@ -1,7 +1,8 @@
 import re
-from typing import Tuple, List
+from typing import Tuple, List, Optional
 from utils.config import Config
 from utils.logging import get_logger
+
 
 logger = get_logger("course_filter")
 

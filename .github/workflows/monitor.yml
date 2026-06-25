@@ -70,9 +70,10 @@ jobs:
           
           # Check if there are changes staged for commit
           if ! git diff --cached --quiet; then
-            logger.info "Changes detected in SQLite database state. Committing..."
+            echo "Changes detected in SQLite database state. Committing..."
             git commit -m "chore: update database state [skip ci]"
             git push
           else
-            logger.info "No database changes detected. Skipping push."
+            echo "No database changes detected. Skipping push."
           fi
+

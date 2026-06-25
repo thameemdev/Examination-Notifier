@@ -1,0 +1,24 @@
+name: Keep Action Alive
+
+on:
+  schedule:
+    # Run once every month (on the 1st of the month at 00:00 UTC)
+    - cron: '0 0 1 * *'
+  workflow_dispatch:
+    # Allow manual triggering
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Create Keep-Alive Commit
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit --allow-empty -m "chore: keep-alive commit to prevent workflow from disabling [skip ci]"
+          git push

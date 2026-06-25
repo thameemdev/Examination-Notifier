@@ -60,12 +60,14 @@ class Config:
         "all integrated pg",
         "integrated pg programmes",
         "integrated pg examinations",
-        "integrated m.sc",
-        "integrated m.a",
-        "integrated m sc",
-        "integrated m a",
-        "integrated msc",
-        "integrated ma"
+        "integrated m.sc programme",
+        "integrated m.sc programmes",
+        "integrated m.a programme",
+        "integrated m.a programmes",
+        "integrated m sc programme",
+        "integrated m sc programmes",
+        "integrated msc programme",
+        "integrated msc programmes"
     ]
 
 

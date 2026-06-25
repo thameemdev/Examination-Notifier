@@ -26,14 +26,20 @@ class CourseFilter:
     ]
 
     @classmethod
-    def check_relevance(cls, title: str, webpage_content: str, pdf_text: Optional[str] = None) -> Tuple[bool, str]:
+    def check_relevance(cls, title: str, webpage_content: str, pdf_text: Optional[str] = None, url: Optional[str] = None) -> Tuple[bool, str]:
         """
-        Determines if a notification is relevant based on the title, webpage content, and pdf text.
+        Determines if a notification is relevant based on the title, webpage content, pdf text, and URL.
         Returns a tuple: (is_relevant: bool, match_reason: str).
         """
         pdf_txt = pdf_text or ""
         combined_text = f"{title}\n{webpage_content}\n{pdf_txt}".lower()
         
+        # 0. Check if notification is from course-specific results portal (course 430)
+        if url and "index/3/430" in url:
+            reason = "From course-specific (ID 430) results portal."
+            logger.info(f"Notification marked RELEVANT: {reason}")
+            return True, reason
+
         # 1. Check for "ALL Examinations" keywords
         for keyword in Config.GENERAL_EXAM_KEYWORDS:
             if keyword.lower() in combined_text:
@@ -48,24 +54,24 @@ class CourseFilter:
                 logger.info(f"Notification marked RELEVANT: {reason}")
                 return True, reason
 
-        # 3. Check for specific Target Course matches
-        # Strong indicators (AI & ML details)
-        ai_ml_keywords = ["artificial intelligence", "machine learning", "ai & ml", "ai and ml"]
-        for keyword in ai_ml_keywords:
-            if keyword.lower() in combined_text:
-                reason = f"Specific target course match: '{keyword}'"
+        # 3. Direct abbreviation matches for target course (highly specific)
+        ai_ml_abbrevs = ["ai & ml", "ai and ml", "ai &ml", "ai&ml", "ai/ml"]
+        for abbrev in ai_ml_abbrevs:
+            if abbrev in combined_text:
+                reason = f"Direct target course abbreviation match: '{abbrev}'"
                 logger.info(f"Notification marked RELEVANT: {reason}")
                 return True, reason
-                
-        # Combination check: Integrated M.Sc AND Computer Science
-        if ("integrated m.sc" in combined_text or 
-            "integrated m sc" in combined_text or 
-            "integrated msc" in combined_text or
-            "integrated computer science" in combined_text) and "computer science" in combined_text:
-            reason = "Integrated M.Sc Computer Science programme combination match."
+
+        # 4. Check for specific Target Course matches using combination check
+        # We require a combination of (integrated) AND (computer science) AND (artificial intelligence or machine learning or data science)
+        has_integrated = any(term in combined_text for term in ["integrated m.sc", "integrated m sc", "integrated msc", "integrated computer", "integrated pg"])
+        has_cs = "computer science" in combined_text
+        has_ai_ml = any(term in combined_text for term in ["artificial intelligence", "machine learning", "data science"])
+        
+        if has_integrated and has_cs and has_ai_ml:
+            reason = "Specific target course combination match (Integrated M.Sc CS AI/ML)."
             logger.info(f"Notification marked RELEVANT: {reason}")
             return True, reason
-
 
         logger.debug("Notification marked IRRELEVANT (no target keywords or general scopes matched).")
         return False, ""

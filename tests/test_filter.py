@@ -47,6 +47,47 @@ def test_course_relevance_ignores():
     )
     assert r2 is False
 
+    # User reported false match: BPES Integrated Programme
+    r3, _ = CourseFilter.check_relevance(
+        "Fee cum TimeTable Notification- IV Semester BPES (Four Year Integrated Programme – 2023, 2022, 2021, 2020, 2019 & 2018 Admissions Reappearance / 2017 & 2016 Admissions Mercy Chance) Degree Examinations, June 2026",
+        ""
+    )
+    assert r3 is False
+
+    # User reported false match: B.Ed rescheduled exams
+    r4, _ = CourseFilter.check_relevance(
+        "II Semester B.Ed Examinations scheduled on 08.06.2026 and 10.06.2026 have been rescheduled",
+        ""
+    )
+    assert r4 is False
+
+    # User reported false match: IMCA timetable containing AI paper in PDF
+    r5, _ = CourseFilter.check_relevance(
+        "TimeTable- VIII Semester IMCA (2022 Admission Regular/ 2021 & 2020 Admission Supplementary) Degree Examinations, June 2026",
+        "",
+        "Day 1: Knowledge Management\nDay 2: Artificial Intelligence"
+    )
+    assert r5 is False
+
+    # User reported false match: M.Sc CSS Artificial Intelligence (2 year regular, non-integrated)
+    r6, _ = CourseFilter.check_relevance(
+        "II Semester M.Sc. (CSS) degree examinations (2025,2024,2023,2022,2021,2020,2019 Admissions)",
+        "",
+        "Course: M.Sc. ARTIFICIAL INTELLIGENCE\nSubject: AI010201 Advanced Machine Learning"
+    )
+    assert r6 is False
+
+def test_results_portal_bypass():
+    """Tests that any results scraped from target course 430 page are automatically relevant."""
+    r, reason = CourseFilter.check_relevance(
+        "II Semester M.Sc. (CSS) degree examinations (2025 Admissions)",
+        "",
+        "",
+        url="https://pareeksha.mgu.ac.in/Pareeksha/index.php/Public/PareekshaResultView_ctrl/index/3/430?exam_id=537"
+    )
+    assert r is True
+    assert "results portal" in reason
+
 def test_high_priority_detection():
     """Tests detection of high-priority emergency notifications."""
     # Postponed

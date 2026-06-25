@@ -32,7 +32,7 @@ class Config:
         "Integrated Computer Science"
     ]
     
-    # General Exam Keywords that apply to everyone
+    # General Exam Keywords that apply to everyone (all examinations)
     GENERAL_EXAM_KEYWORDS = [
         "all examinations",
         "all exams",
@@ -40,23 +40,35 @@ class Config:
         "all ug examinations",
         "all pg/ug examinations",
         "all the examinations scheduled",
-        "examinations scheduled on",
-        "examinations postponed",
-        "examinations rescheduled",
-        "examinations cancelled",
-        "university holiday"
+        "all examinations scheduled",
+        "all examinations postponed",
+        "all examinations rescheduled",
+        "all examinations cancelled",
+        "postponement of all",
+        "rescheduling of all",
+        "cancellation of all",
+        "university holiday",
+        "emergency notice affecting all"
     ]
     
-    # General Integrated Program Keywords
+    # General Integrated Program Keywords that affect ALL integrated programs
     INTEGRATED_PROGRAM_KEYWORDS = [
-        "integrated programme",
-        "integrated programmes",
-        "integrated m.a",
+        "integrated m.a/m.sc",
+        "integrated m.sc/m.a",
+        "all integrated programmes",
+        "all integrated programs",
+        "all integrated pg",
+        "integrated pg programmes",
+        "integrated pg examinations",
         "integrated m.sc",
-        "integrated ms",
-        "integrated ma",
-        "integrated courses"
+        "integrated m.a",
+        "integrated m sc",
+        "integrated m a",
+        "integrated msc",
+        "integrated ma"
     ]
+
+
 
     @classmethod
     def validate(cls):

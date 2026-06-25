@@ -57,11 +57,15 @@ class CourseFilter:
                 logger.info(f"Notification marked RELEVANT: {reason}")
                 return True, reason
                 
-        # Combination check: Integrated AND Computer Science
-        if "integrated" in combined_text and "computer science" in combined_text:
-            reason = "Integrated Computer Science programme combination match."
+        # Combination check: Integrated M.Sc AND Computer Science
+        if ("integrated m.sc" in combined_text or 
+            "integrated m sc" in combined_text or 
+            "integrated msc" in combined_text or
+            "integrated computer science" in combined_text) and "computer science" in combined_text:
+            reason = "Integrated M.Sc Computer Science programme combination match."
             logger.info(f"Notification marked RELEVANT: {reason}")
             return True, reason
+
 
         logger.debug("Notification marked IRRELEVANT (no target keywords or general scopes matched).")
         return False, ""

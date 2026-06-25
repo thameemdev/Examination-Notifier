@@ -1,8 +1,9 @@
 import httpx
 from datetime import datetime
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from utils.config import Config
 from utils.logging import get_logger
+
 
 logger = get_logger("telegram_client")
 

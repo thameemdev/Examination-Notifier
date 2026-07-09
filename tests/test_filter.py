@@ -98,3 +98,35 @@ def test_high_priority_detection():
     assert CourseFilter.is_high_priority("Revised Time Table for Integrated M.Sc AI & ML") is True
     # Regular notice
     assert CourseFilter.is_high_priority("General instructions for examination registration") is False
+
+def test_postponement_relevance_filtering():
+    """Tests refinement of postponement notifications depending on PDF content."""
+    # 1. Postponed exam that lists specific other courses in PDF (MBA, MCA) but not our course
+    r1, reason1 = CourseFilter.check_relevance(
+        title="18628/EA 1/1/2019/EA 1- All the examinations scheduled on 26.06.2026 have been postponed and rescheduled",
+        webpage_content="Check notices details.",
+        pdf_text="Sl.No. Name of the Examination Scheduled Date Rescheduled Date\n1. IV Semester MBA (2024 Admission Regular)\n2. V Semester MCA (2011 Admission Onwards)",
+        category="Postponement"
+    )
+    assert r1 is False
+    assert "lists other courses" in reason1
+
+    # 2. Postponed exam that lists our course in PDF
+    r2, reason2 = CourseFilter.check_relevance(
+        title="18628/EA 1/1/2019/EA 1- All the examinations scheduled on 22.06.2026 have been postponed and rescheduled",
+        webpage_content="Check notices details.",
+        pdf_text="Sl.No. Name of the Examination Scheduled Date Rescheduled Date\n1. III Semester MCA\n2. II Semester Integrated M.Sc Computer Science - Artificial Intelligence & Machine Learning",
+        category="Postponement"
+    )
+    assert r2 is True
+    assert "explicitly lists target course" in reason2
+
+    # 3. Universal postponement (heavy rain) where no specific courses are listed in PDF
+    r3, reason3 = CourseFilter.check_relevance(
+        title="All examinations scheduled on 22.06.2026 are postponed",
+        webpage_content="Due to heavy rain.",
+        pdf_text="It is hereby notified that all examinations scheduled on 22.06.2026 are postponed. The rescheduled dates will be announced later.",
+        category="Postponement"
+    )
+    assert r3 is True
+    assert "General postponement notice" in reason3

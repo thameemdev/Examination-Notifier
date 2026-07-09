@@ -132,6 +132,8 @@ class MGUScraper(BaseScraper):
                             pdf_url = None
                             if href.lower().endswith(".pdf") or ".pdf?" in href.lower():
                                 # Clean potential query params from PDF URL to get standard file format
+                                if "?" in href:
+                                    href = href.split("?")[0]
                                 pdf_url = href
                                 
                             category = self._classify_by_title(title, cat_name)

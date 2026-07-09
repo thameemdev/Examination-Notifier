@@ -2,8 +2,10 @@ name: MGU Exam Monitor
 
 on:
   schedule:
-    # Run every 10 minutes
-    - cron: '*/10 * * * *'
+    # Run every 10 minutes between 9:00 AM and 6:00 PM IST (03:30 AM to 12:30 PM UTC)
+    - cron: '30,40,50 3 * * *'       # 9:00 AM, 9:10 AM, 9:20 AM IST
+    - cron: '*/10 4-11 * * *'        # 9:30 AM to 5:20 PM IST (every 10 minutes)
+    - cron: '0,10,20,30 12 * * *'    # 5:30 PM to 6:00 PM IST
   workflow_dispatch:
     # Allow manual triggering
 

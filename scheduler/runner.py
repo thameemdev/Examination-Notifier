@@ -91,7 +91,7 @@ async def process_notification_item(notice: Dict[str, Any], db: DBManager,
                 logger.info(f"Saved new PDF record for {pdf_url}")
                 
     # Define relevance checks
-    is_relevant, match_reason = CourseFilter.check_relevance(title, notice.get("raw_content", ""), pdf_text, url)
+    is_relevant, match_reason = CourseFilter.check_relevance(title, notice.get("raw_content", ""), pdf_text, url, category=category)
     is_priority = CourseFilter.is_high_priority(title, pdf_text)
     
     # Define default metadata in case of no PDF
@@ -156,7 +156,7 @@ async def process_notification_item(notice: Dict[str, Any], db: DBManager,
                     metadata = analysis
             
             # Recheck relevance
-            is_relevant, match_reason = CourseFilter.check_relevance(title, notice.get("raw_content", ""), pdf_text, url)
+            is_relevant, match_reason = CourseFilter.check_relevance(title, notice.get("raw_content", ""), pdf_text, url, category=category)
             is_priority = CourseFilter.is_high_priority(title, pdf_text)
             
             status = "SENT" if is_relevant else "SKIPPED"
